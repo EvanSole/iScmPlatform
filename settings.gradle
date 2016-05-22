@@ -1,0 +1,26 @@
+rootProject.name = 'iScmPlatform'
+
+include 'iScmCommon'//公共方法
+
+include 'iScmPOJO'//实体映射
+
+include 'iScmCore'//核心模块
+
+include 'iScmAutoIdServer' //自动生成全局唯一主键id服务
+
+include 'iScmInterface' //所有服务调用的接口和配置
+
+include 'iScmAppUserControl' //前端服务及界面
+
+include 'iScmBaseServer' //base库服务
+
+include 'iScmMainServer' //main库服务
+
+include 'iScmOrderServer' //订单服务
+
+include 'iScmRocketMQ'  //消息队列服务
+
+include 'iScmQuartzServer' //调度服务
+
+include 'iScmReportServer' //报表服务
+

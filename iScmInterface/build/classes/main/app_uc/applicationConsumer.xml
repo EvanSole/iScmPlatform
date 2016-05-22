@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- consumer application name -->  
+    <dubbo:application name="IScmAppUserControl" />
+
+    <!-- registry address, used for consumer to discover services -->
+    <dubbo:registry client="zkclient" address="${zookeeper.address}"/>
+    <dubbo:consumer timeout="50000"/>
+
+    <dubbo:reference id="autoIdClient" interface="com.iscm.service.autoid.IAutoIdClient" />
+
+    <import resource="applicationConsumer_base.xml"/>
+    <import resource="applicationConsumer_main.xml"/>
+    <import resource="applicationConsumer_order.xml"/>
+
+</beans>

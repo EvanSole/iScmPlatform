@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 凭证匹配器 -->
+    <bean id="customCredentialsMatcher" class="com.iscm.uc.authorization.CustomCredentialsMatcher">
+        <property name="hashAlgorithmName" value="md5"></property>
+        <property name="hashIterations" value="12"></property>
+        <property name="storedCredentialsHexEncoded" value="true"></property>
+    </bean>
+
+    <!-- Realm实现-->
+    <bean id="myRealm" class="com.iscm.uc.authorization.MyRealm">
+        <property name="credentialsMatcher" ref="customCredentialsMatcher"></property>
+    </bean>
+
+    <!-- 安全管理器 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realms">
+            <list><ref bean="myRealm"/></list>
+        </property>
+    </bean>
+
+    <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
+        <property name="arguments" ref="securityManager"/>
+    </bean>
+
+    <!-- 身份验证过滤器 -->
+    <bean id="cusAuthc" class="com.iscm.uc.authorization.CustomAuthenticationFilter"/>
+
+    <!-- Shiro的Web过滤器 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean" depends-on="cusAuthc">
+        <property name="securityManager" ref="securityManager"/>
+        <property name="loginUrl" value="/login.html"/>
+        <property name="unauthorizedUrl" value="/unauthorized.jsp"/>
+        <property name="filterChainDefinitions">
+            <value>
+                /**/login.html = anon
+                /login = anon
+                /logout = logout
+                /favicon.ico = anon
+                /**/*.css = anon
+                /**/*.ico = anon
+                /**/*.jpg = anon
+                /**/*.png = anon
+                /**/*.gif = anon
+                /app/bower_components/** = anon
+                /app/views/**/*.html =cusAuthc
+                /** = cusAuthc
+            </value>
+        </property>
+        <property name="filters">
+            <map>
+                <entry key="cusAuthc" value-ref="cusAuthc"></entry>
+            </map>
+        </property>
+
+    </bean>
+
+    <!-- Shiro生命周期处理器,保证实现了Shiro内部lifecycle函数的bean执行 -->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+</beans>

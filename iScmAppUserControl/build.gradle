@@ -1,0 +1,52 @@
+apply plugin: 'war'
+
+sourceCompatibility = 1.5
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    def shiroVersion = '1.2.3'
+    def hibernateValidtorVersion = '5.1.3.Final'
+
+    compile project(':iScmCore')
+    compile project(':iScmMainServer')
+    compile project(':iScmBaseServer')
+
+    /**
+     * shiro相关依赖
+     */
+    compile(group: 'org.apache.shiro', name: 'shiro-core', version: "$shiroVersion") {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+    compile(group: 'org.apache.shiro', name: 'shiro-web', version: "$shiroVersion") {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+    compile(group: 'org.apache.shiro', name: 'shiro-cas', version: "$shiroVersion") {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+    compile(group: 'org.apache.shiro', name: 'shiro-features', version: "$shiroVersion") {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+    compile(group: 'org.apache.shiro', name: 'shiro-guice', version: "$shiroVersion") {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+    compile(group: 'org.apache.shiro', name: 'shiro-spring', version: "$shiroVersion") {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+    compile(group: 'org.apache.shiro', name: 'shiro-ehcache', version: "$shiroVersion") {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+
+    /**
+     * hibernate validtor相关依赖
+     */
+    compile group: 'org.hibernate', name: 'hibernate-validator', version: "$hibernateValidtorVersion"
+
+    compile 'com.mangofactory:swagger-springmvc:0.9.5'
+
+    compile 'net.sourceforge.htmlunit:htmlunit:2.18'
+}
